@@ -6,101 +6,91 @@
 /*   By: bastalze <bastalze@student.42vienna.c      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 12:43:51 by bastalze          #+#    #+#             */
-/*   Updated: 2025/11/25 17:27:13 by bastalze         ###   ########.fr       */
+/*   Updated: 2025/12/03 17:08:39 by bastalze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
 
-char	*make_remainder(static char *remainder, char *buffer, char *line)
+char	*make_remainder(char *remainder, char *line)
 {
 	size_t	i;
 	size_t	j;
 
 	i = 0;
-	while (buffer != '\n')
-	{
-		line [(strlen(line)) + i] = buffer[i];
+	while (line[i] != '\n')
 		i++;
-	}
-	line[(strlen(line)) + i] = '\n';
+	line[i] = '\n';
 	i++;
 	j = 0;
-	while (rest[i])
+	while (line[i + j])
 	{
-		remainder[j] = buffer[i + j];
+		remainder[j] = line[i + j];
 		j++;
 	}
 	remainder[j] = 0;
+	line[i] = 0;
 	return (line);
 }
 
-char	*finding_nl(static char * remainder, char *buffer, size_t i, int fd)
+char	*finding_nl(static char *remainder, char *buffer, int fd)
 {
-	char	*line;
-	size_t	multi;
-
-	multi = 1;
-	if (!(ft_str_i(buffer, '\n')))
+	char	*line1;
+	char	*line2;
+	int		i;
+		
+	line1 = malloc(BUFFER_SIZE + 1);
+	i = 1;
+	while (i > 0)
 	{
 		i = read(fd, buffer, BUFFER_SIZE);
 		if (i == -1)
 			return (NULL);
 		buffer[i] = 0;
-		line = malloc((BUFFER_SIZE * multi) + 1);
-		// memcpy(line, buffer);
-		// line[(BUFFER_SIZE * multi) + 1] = 0;
+		line2 = strjoin(line1, buffer);
+		free(line1);
+		line1 = line2;
 		if (i < BUFFER_SIZE)
-			return (line);
-		multi++;
-		finding_nl(buffer, i, fd);
-		
+			return (line1);
+		if else (ft_str_i(buffer, '\n') != 0)
+			return (make_remainder(remainder, buffer, line1));
 	}
-	else if (ft_str_i(buffer, '\n'))
-	{
-		line = make_remainder(remainder, buffer, line);
-	}
-	return (line);
-}
-
-char	*first_buffer(static char *remainder, int fd)
-{
-	char	buffer[BUFFER_SIZE + 1];
-	size_t	i;
-
-	i = 0;
-	i = read(fd, buffer, BUFFER_SIZE);
-	if (i == -1)
-		return (NULL);
-	buffer[i] = 0;
-	if (i > BUFFER_SIZE)
-		return (buffer);
-	return (finding_nl(remainder, buffer, i, fd));
-}
-
-char	*cc_remainder(static char *remainder, int fd)
-{
-	char *line;
-	char *result;
-	char line[BUFFER_SIZE + 1];
-
-	if (ft_str_i(remainder, '\n'))
-		//bzero(line);
-		return (make_remainder(remainder, remainder, line);
-	line = first_buffer(remainder, fd);
-	if (line == NULL)
-		return (NULL);
-	result = ft_strjoin(remainder, line);
-	//remainder = 0 //bzero(remainder);
-	free(line);
-	return (result);
+	if (i == 0)
+		return (line1);
 }
 
 char	*get_next_line(int fd)
 {
 	static char	remainder[BUFFER_SIZE + 1];
+	char		line[BUFFER_SIZE + 1];
+	char		*rline;
 
-	if (!remainder)
-		return (finding_nl(fd));
+	bzero(line);
+	if (ft_str_i(remainder, '\n') != 0)
+		return (make_remainder(remainder, line));
+	line = finding_nl(remainder, line, fd);
+	if (line == NULL)
+		return (NULL);
+	if (remainder[0] != 0)
+	{
+		rline = ft_strjoin(remainder, line);
+		bzero(remainder);
+		free(line);
+		return (rline);
+	}
 	else
-		return (cc_remainder(remainder, fd));
+		return (line);
+}
+
+#include <stdio.h>
+int main(void)
+{
+	char *result;
+
+	result = get_next_line(0);
+	printf("%s\n", result);
+	while (result != NULL)
+	{
+		result = get_next_line(0);
+		printf("%s\n", result);
+	}
 }

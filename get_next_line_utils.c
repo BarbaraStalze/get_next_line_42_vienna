@@ -6,10 +6,30 @@
 /*   By: bastalze <bastalze@student.42vienna.c      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 12:44:17 by bastalze          #+#    #+#             */
-/*   Updated: 2025/11/25 12:57:57 by bastalze         ###   ########.fr       */
+/*   Updated: 2025/12/02 12:13:38 by bastalze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
+
+void	set_zero(char *s)
+{
+	while (s* != 0)
+	{
+		*str = 0;
+		str++;
+	}
+	return (str);
+}
+
+size_t	ft_strlen(const char *s)
+{
+	size_t	len;
+
+	len = 0;
+	while (s[len] != 0)
+		len ++;
+	return (len);
+}
 
 static int	ft_string(char *string, char const *s1, int s1len)
 {
