@@ -6,19 +6,18 @@
 /*   By: bastalze <bastalze@student.42vienna.c      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 12:44:17 by bastalze          #+#    #+#             */
-/*   Updated: 2025/12/02 12:13:38 by bastalze         ###   ########.fr       */
+/*   Updated: 2025/12/09 12:01:56 by bastalze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
 
-void	set_zero(char *s)
+void	ft_bzero(char *s)
 {
-	while (s* != 0)
+	while (*s != 0)
 	{
-		*str = 0;
-		str++;
+		*s = 0;
+		s++;
 	}
-	return (str);
 }
 
 size_t	ft_strlen(const char *s)
@@ -31,7 +30,7 @@ size_t	ft_strlen(const char *s)
 	return (len);
 }
 
-static int	ft_string(char *string, char const *s1, int s1len)
+static int	ft_string(char *string, char *s1, int s1len)
 {
 	int	i;
 
@@ -45,7 +44,7 @@ static int	ft_string(char *string, char const *s1, int s1len)
 	return (i);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char *s1, char const *s2)
 {
 	int		s1len;
 	int		s2len;
@@ -68,6 +67,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		s2len--;
 	}
 	string[i] = 0;
+	free(s1);
 	return (string);
 }
 
