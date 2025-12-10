@@ -35,8 +35,12 @@ char	*add_remainder(char *remainder)
 {
 	char	*rline;
 	size_t	i;
-
+	
+	if (!remainder)
+		return (NULL);
 	rline = malloc(BUFFER_SIZE + 1);
+	if (rline == NULL)
+		return (NULL);
 	i = 0;
 	while (remainder[i] != 0)
 	{
@@ -47,29 +51,50 @@ char	*add_remainder(char *remainder)
 	ft_bzero(remainder);
 	return (rline);
 }
-
+/*
 char	*finding_nl(char *remainder, char *buffer, int fd)
 {
 	char	*line1;
-	char	*line2;
 	int		i;
 
 	line1 = add_remainder(remainder);
 	i = 1;
-	while (i > 0)
+	while (i >= 0)
 	{
 		i = read(fd, buffer, BUFFER_SIZE);
 		if (i < 0)
 			return (NULL);
 		buffer[i] = 0;
-		line2 = ft_strjoin(line1, buffer);
-		line1 = line2;
+		line1 = ft_strjoin(line1, buffer);
 		if ((i < BUFFER_SIZE && ft_str_i(buffer, '\n') == 0) || (i == 0))
 			return (line1);
 		else if (ft_str_i(buffer, '\n') != 0)
 			return (make_remainder(remainder, line1));
 	}
 	return (NULL);
+}
+*/
+
+char	*finding_nl(char *remainder, char *buffer, int fd)
+{
+	int	b_read;
+	char	*line;
+
+	line = add_remainder(remainder);
+	while ((b_read = read(fd, buffer, BUFFER_SIZE)) > 0)
+	{
+		if (b_read < 0)
+			return (NULL);
+		buffer[b_read] = 0;
+		line = ft_strjoin(line, buffer);
+		if (ft_str_i(buffer, '\n') != 0)
+			return (make_remainder(remainder, line));
+		else if (b_read < BUFFER_SIZE)
+			return (line);
+	}
+	if (ft_strlen(line) == 0)
+		return (NULL);
+	return (line);
 }
 
 char	*nl_in_remainder(char *remainder)
@@ -79,6 +104,8 @@ char	*nl_in_remainder(char *remainder)
 	size_t	j;
 
 	line = malloc(BUFFER_SIZE + 1);
+	if (line == NULL)
+		return (NULL);
 	i = 0;
 	while (remainder[i] != '\n')
 	{
@@ -86,7 +113,8 @@ char	*nl_in_remainder(char *remainder)
 		i++;
 	}
 	line[i] = '\n';
-	line[i++] = 0;
+	i++;
+	line[i] = 0;
 	j = 0;
 	while (remainder[i + j] != 0)
 	{
@@ -117,7 +145,7 @@ int main(void)
 	int fd;
 	char *result;
 
-	fd = open("testfile.txt", O_RDONLY);
+	fd = open("testfile_hello.txt", O_RDONLY);
 	if (fd == -1)
 		return 1;
 	while ((result = get_next_line(fd)))
@@ -125,10 +153,6 @@ int main(void)
 		printf("%s\n", result);
 		free(result);
 	}
-	printf("%s\n", result);
-	free(result);
-	printf("%s\n", result);
-	free(result);
 	close(fd);
 	return 0;
 }
