@@ -6,17 +6,22 @@
 /*   By: bastalze <bastalze@student.42vienna.c      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 12:44:17 by bastalze          #+#    #+#             */
-/*   Updated: 2025/12/09 12:01:56 by bastalze         ###   ########.fr       */
+/*   Updated: 2025/12/11 14:52:35 by bastalze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
 
 void	ft_bzero(char *s)
 {
-	while (*s != 0)
+	int	len;
+	int	i;
+
+	len = BUFFER_SIZE + 1;
+	i = 0;
+	while (i < len)
 	{
-		*s = 0;
-		s++;
+		s[i] = 0;
+		i++;
 	}
 }
 
@@ -56,7 +61,7 @@ char	*ft_strjoin(char *s1, char const *s2)
 	s2len = ft_strlen(s2);
 	string = malloc(s1len + s2len + 1);
 	if (!string)
-		return (0);
+		return (NULL);
 	i = ft_string(string, s1, s1len);
 	j = 0;
 	while (s2len > 0)

@@ -6,7 +6,7 @@
 /*   By: bastalze <bastalze@student.42vienna.c      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 12:43:51 by bastalze          #+#    #+#             */
-/*   Updated: 2025/12/11 16:58:03 by bastalze         ###   ########.fr       */
+/*   Updated: 2025/12/10 13:51:09 by bastalze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
@@ -35,9 +35,11 @@ char	*add_remainder(char *remainder)
 {
 	char	*rline;
 	size_t	i;
-
+	
+	if (!remainder)
+		return (NULL);
 	rline = malloc(BUFFER_SIZE + 1);
-	if (!rline)
+	if (rline == NULL)
 		return (NULL);
 	i = 0;
 	while (remainder[i] != 0)
@@ -49,31 +51,49 @@ char	*add_remainder(char *remainder)
 	ft_bzero(remainder);
 	return (rline);
 }
-
-char	*find_nl(char *remainder, char *buffer, int fd)
+/*
+char	*finding_nl(char *remainder, char *buffer, int fd)
 {
-	int		b_read;
+	char	*line1;
+	int		i;
+
+	line1 = add_remainder(remainder);
+	i = 1;
+	while (i >= 0)
+	{
+		i = read(fd, buffer, BUFFER_SIZE);
+		if (i < 0)
+			return (NULL);
+		buffer[i] = 0;
+		line1 = ft_strjoin(line1, buffer);
+		if ((i < BUFFER_SIZE && ft_str_i(buffer, '\n') == 0) || (i == 0))
+			return (line1);
+		else if (ft_str_i(buffer, '\n') != 0)
+			return (make_remainder(remainder, line1));
+	}
+	return (NULL);
+}
+*/
+
+char	*finding_nl(char *remainder, char *buffer, int fd)
+{
+	int	b_read;
 	char	*line;
 
 	line = add_remainder(remainder);
-	if (!line)
-		return (NULL);
-	while (1)
+	while ((b_read = read(fd, buffer, BUFFER_SIZE)) > 0)
 	{
-		b_read = read(fd, buffer, BUFFER_SIZE);
-		if (b_read <= 0)
-			break ;
+		if (b_read < 0)
+			return (NULL);
 		buffer[b_read] = 0;
 		line = ft_strjoin(line, buffer);
-		if (!line)
-			return (NULL);
 		if (ft_str_i(buffer, '\n') != 0)
 			return (make_remainder(remainder, line));
 		else if (b_read < BUFFER_SIZE)
 			return (line);
 	}
 	if (ft_strlen(line) == 0)
-		return (free(line), NULL);
+		return (NULL);
 	return (line);
 }
 
@@ -84,7 +104,7 @@ char	*nl_in_remainder(char *remainder)
 	size_t	j;
 
 	line = malloc(BUFFER_SIZE + 1);
-	if (!line)
+	if (line == NULL)
 		return (NULL);
 	i = 0;
 	while (remainder[i] != '\n')
@@ -114,9 +134,9 @@ char	*get_next_line(int fd)
 	if (ft_str_i(remainder, '\n') != 0)
 		return (nl_in_remainder(remainder));
 	else
-		return (find_nl(remainder, buffer, fd));
+		return (finding_nl(remainder, buffer, fd));
 }
-
+/*
 #include <stdio.h>
 #include <fcntl.h>
 
@@ -125,7 +145,7 @@ int main(void)
 	int fd;
 	char *result;
 
-	fd = open("read_error.txt", O_RDONLY);
+	fd = open("testfile_hello.txt", O_RDONLY);
 	if (fd == -1)
 		return 1;
 	while ((result = get_next_line(fd)))
@@ -136,4 +156,4 @@ int main(void)
 	close(fd);
 	return 0;
 }
-
+*/
