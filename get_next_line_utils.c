@@ -6,11 +6,11 @@
 /*   By: bastalze <bastalze@student.42vienna.c      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 12:44:17 by bastalze          #+#    #+#             */
-/*   Updated: 2025/12/11 14:52:35 by bastalze         ###   ########.fr       */
+/*   Updated: 2025/12/11 18:29:22 by bastalze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
-
+/*
 void	ft_bzero(char *s)
 {
 	int	len;
@@ -24,7 +24,7 @@ void	ft_bzero(char *s)
 		i++;
 	}
 }
-
+*/
 size_t	ft_strlen(const char *s)
 {
 	size_t	len;

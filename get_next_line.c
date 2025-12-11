@@ -6,7 +6,7 @@
 /*   By: bastalze <bastalze@student.42vienna.c      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 12:43:51 by bastalze          #+#    #+#             */
-/*   Updated: 2025/12/11 16:58:03 by bastalze         ###   ########.fr       */
+/*   Updated: 2025/12/11 18:25:08 by bastalze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
@@ -46,7 +46,7 @@ char	*add_remainder(char *remainder)
 		i++;
 	}
 	rline[i] = 0;
-	ft_bzero(remainder);
+	remainder[0] = 0;
 	return (rline);
 }
 
@@ -110,13 +110,14 @@ char	*get_next_line(int fd)
 	static char	remainder[BUFFER_SIZE + 1];
 	char		buffer[BUFFER_SIZE + 1];
 
-	ft_bzero(buffer);
+	buffer[0] = 0;
 	if (ft_str_i(remainder, '\n') != 0)
 		return (nl_in_remainder(remainder));
 	else
 		return (find_nl(remainder, buffer, fd));
 }
 
+/*
 #include <stdio.h>
 #include <fcntl.h>
 
@@ -136,4 +137,4 @@ int main(void)
 	close(fd);
 	return 0;
 }
-
+*/
