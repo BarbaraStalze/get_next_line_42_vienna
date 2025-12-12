@@ -6,12 +6,12 @@
 /*   By: bastalze <bastalze@student.42vienna.c      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 12:43:51 by bastalze          #+#    #+#             */
-/*   Updated: 2025/12/12 15:44:37 by bastalze         ###   ########.fr       */
+/*   Updated: 2025/12/12 13:06:35 by bastalze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
 
-char	*remainder_from_end(char *remainder, char *line)
+char	*make_remainder(char *remainder, char *line)
 {
 	size_t	i;
 	size_t	j;
@@ -31,7 +31,7 @@ char	*remainder_from_end(char *remainder, char *line)
 	return (line);
 }
 
-char	*remainder_to_start(char *remainder)
+char	*add_remainder(char *remainder)
 {
 	char	*line;
 
@@ -49,26 +49,30 @@ char	*find_nl(char *remainder, char *buffer, int fd)
 	int		b_read;
 	char	*line;
 
-	line = remainder_to_start(remainder);
+	line = add_remainder(remainder);
 	if (!line)
 		return (NULL);
 	while (1)
 	{
 		b_read = read(fd, buffer, BUFFER_SIZE);
-		if (b_read <= 0)
-			break ;
+		if (b_read < 0)
+			return (free(line), NULL);
+		else if (b_read == 0)
+		{
+			if (ft_strlen(line) != 0)
+				return (line);
+			else 
+				return (free(line), NULL);
+		}
 		buffer[b_read] = 0;
 		line = ft_strjoin(line, buffer);
 		if (!line)
 			return (NULL);
 		if (ft_str_i(buffer, '\n') != 0)
-			return (remainder_from_end(remainder, line));
+			return (make_remainder(remainder, line));
 		else if (b_read < BUFFER_SIZE)
 			return (line);
 	}
-	if (ft_strlen(line) == 0)
-		return (free(line), NULL);
-	return (line);
 }
 
 char	*nl_in_remainder(char *remainder)
@@ -102,7 +106,7 @@ char	*nl_in_remainder(char *remainder)
 char	*get_next_line(int fd)
 {
 	static char	remainder[BUFFER_SIZE + 1];
-	static char	buffer[BUFFER_SIZE + 1];
+	char		buffer[BUFFER_SIZE + 1];
 
 	buffer[0] = 0;
 	if (ft_str_i(remainder, '\n') != 0)
@@ -111,7 +115,6 @@ char	*get_next_line(int fd)
 		return (find_nl(remainder, buffer, fd));
 }
 
-/*
 #include <stdio.h>
 #include <fcntl.h>
 
@@ -119,19 +122,19 @@ int main(void)
 {
 	int fd;
 	char *result;
+	int i = 0;
 
-	fd = open("empty1.txt", O_RDONLY);
+	fd = open("olnonl.txt", O_RDONLY);
 	if (fd == -1)
 		return 1;
-//	result = get_next_line(fd);
-//	if (result == NULL)
-//		printf("NULL");
-	while ((result = get_next_line(fd)))
+	result = get_next_line(fd);
+	while (i < 10)
 	{
 		printf("%s\n", result);
 		free(result);
+		i++;
 	}
 	close(fd);
 	return 0;
 }
-*/
+
