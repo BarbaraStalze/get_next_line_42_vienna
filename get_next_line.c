@@ -6,7 +6,7 @@
 /*   By: bastalze <bastalze@student.42vienna.c      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 12:43:51 by bastalze          #+#    #+#             */
-/*   Updated: 2025/12/12 15:44:37 by bastalze         ###   ########.fr       */
+/*   Updated: 2025/12/12 15:59:46 by bastalze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
@@ -133,5 +133,13 @@ int main(void)
 	}
 	close(fd);
 	return 0;
+}
+*/
+/*
+#include <stdio.h>
+
+int main(void)
+{
+	printf("%s", (get_next_line(1)));
 }
 */
